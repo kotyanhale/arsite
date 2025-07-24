@@ -1,201 +1,195 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR.js Видеоплеер</title>
-    <script src="./library/aframe.min.js"></script>
-    <script src="./library/aframe-ar.js"></script>
-    <style>
-        #instructionsButton {
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            background: #333;
-            color: white;
-            border: 2px solid white;
-            border-radius: 5px;
-            padding: 10px;
-            cursor: pointer;
-            font-family: Arial, sans-serif;
-            font-size: 16px;
-            z-index: 100;
-            transition: background 0.3s;
-        }
-        #instructionsButton:hover {
-            background: #555;
-        }
-        #instructions {
-            display: none;
-            position: fixed;
-            bottom: 50px;
-            left: 10px;
-            color: white;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            font-family: Arial, sans-serif;
-            z-index: 100;
-            max-width: 300px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AR.js Видеоплеер</title>
+  <script src="./library/aframe.min.js"></script>
+  <script src="./library/aframe-ar.js"></script>
+  <style>
+    #instructionsButton {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      background: #333;
+      color: white;
+      border: 2px solid white;
+      border-radius: 5px;
+      padding: 10px;
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      z-index: 100;
+      transition: background 0.3s;
+    }
+    #instructionsButton:hover {
+      background: #555;
+    }
+    #instructions {
+      display: none;
+      position: fixed;
+      bottom: 50px;
+      left: 10px;
+      color: white;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      font-family: Arial, sans-serif;
+      z-index: 100;
+      max-width: 300px;
+    }
+
+    #startOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: #000;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      font-family: Arial, sans-serif;
+      font-size: 20px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #startButton {
+      padding: 15px 30px;
+      font-size: 18px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs>
-        <!-- ------------------------Маркер hiro--------------------- -->
-        <a-marker type="pattern" url="./marker/pattern-hiro.patt" emitevents="true" id="marker_hiro">
-            <!-- Видеоэлемент -->
-            <a-video id="video1" src="#test-video" width="16" height="9" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
-        </a-marker>
-        <a-entity camera></a-entity>
-        <!-- ------------------------Маркер hiro--------------------- -->
-        <!-- ------------------------Маркер A------------------------ -->
-        <a-marker type="pattern" url="./marker/pattern-letterA.patt" emitevents="true" id="marker_A">
-            <!-- Видеоэлемент -->
-            <a-video id="video2" src="#A-video" width="16" height="9" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
-        </a-marker>
-        <a-entity camera></a-entity>
-        <!-- ------------------------Маркер A------------------------ -->
-        <!-- ------------------------Маркер B------------------------ -->
-        <a-marker type="pattern" url="./marker/pattern-letterB.patt" emitevents="true" id="marker_B">
-            <!-- Видеоэлемент -->
-            <a-video id="video3" src="#B-video" width="9" height="16" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
-        </a-marker>
-        <a-entity camera></a-entity>
-        <!-- ------------------------Маркер B------------------------ -->
-        <!-- ------------------------Маркер C------------------------ -->
-        <a-marker type="pattern" url="./marker/pattern-letterC.patt" emitevents="true" id="marker_C">
-            <!-- Видеоэлемент -->
-            <a-video id="video4" src="#C-video" width="16" height="9" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
-        </a-marker>
-        <a-entity camera></a-entity>
-        
-        <!-- ------------------------Маркер C------------------------ -->
-        
-        <!-- ------------------------Маркер Cat------------------------ -->
-                <a-marker type="pattern" url="./marker/pattern-cat.patt" emitevents="true" id="marker_Cat">
-            <!-- Видеоэлемент -->
-            <a-video id="video5" src="#cat-video" width="10" height="10" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
-        </a-marker>
-        <a-entity camera></a-entity>
 
-        <!-- Список видео -->
-        <a-assets>
-            <video id="test-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
-                <source src="./videos/yar.mp4" type="video/mp4">
-            </video>
-            <video id="A-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
-                <source src="./videos/yar2.mp4" type="video/mp4">
-            </video>
-            <video id="B-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
-                <source src="./videos/yar3.mp4" type="video/mp4">
-            </video>
-            <video id="cat-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
-                <source src="./videos/cat.mp4" type="video/mp4">
-            </video>
-        </a-assets>
-        <!-- Список видео -->
-    </a-scene>
+  <!-- Кнопка запуска для мобильных -->
+  <div id="startOverlay">
+    <button id="startButton">Нажмите, чтобы начать AR</button>
+  </div>
 
-    <!-- Кнопка для показа/скрытия инструкций -->
-    <button id="instructionsButton">Показать инструкции</button>
+  <!-- AR-сцена -->
+  <a-scene embedded arjs>
+    <a-marker type="pattern" url="./marker/pattern-hiro.patt" emitevents="true" id="marker_hiro">
+      <a-video src="#test-video" width="16" height="9" position="0 0 0" rotation="-90 0 0"
+               scale="0.25 0.25 0.25" visible="true"></a-video>
+    </a-marker>
 
-    <!-- Инструкции для пользователя -->
-    <div id="instructions">
-        <h3>Инструкции по использованию Видеоплеера</h3>
-        <p>1. Направьте камеру вашего устройства на один из маркеров (hiro, A, B или C).</p>
-        <p>2. При обнаружении маркера начнется воспроизведение соответствующего видео.</p>
-        <p>3. Если маркер пропадает из поля зрения камеры, видео останавливается и сбрасывается на начало.</p>
-        <p>4. Убедитесь, что у вас хорошее освещение и маркер четко виден для корректной работы AR.</p>
-    </div>
+    <a-marker type="pattern" url="./marker/pattern-letterA.patt" emitevents="true" id="marker_A">
+      <a-video src="#A-video" width="16" height="9" position="0 0 0" rotation="-90 0 0"
+               scale="0.25 0.25 0.25" visible="true"></a-video>
+    </a-marker>
 
-    <script>
-        // Переключение видимости инструкций
-        const instructionsButton = document.getElementById('instructionsButton');
-        const instructions = document.getElementById('instructions');
-        instructionsButton.addEventListener('click', () => {
-            const isVisible = instructions.style.display === 'block';
-            instructions.style.display = isVisible ? 'none' : 'block';
-            instructionsButton.textContent = isVisible ? 'Показать инструкции' : 'Скрыть инструкции';
+    <a-marker type="pattern" url="./marker/pattern-letterB.patt" emitevents="true" id="marker_B">
+      <a-video src="#B-video" width="9" height="16" position="0 0 0" rotation="-90 0 0"
+               scale="0.25 0.25 0.25" visible="true"></a-video>
+    </a-marker>
+
+    <a-marker type="pattern" url="./marker/pattern-letterC.patt" emitevents="true" id="marker_C">
+      <a-video src="#C-video" width="16" height="9" position="0 0 0" rotation="-90 0 0"
+               scale="0.25 0.25 0.25" visible="true"></a-video>
+    </a-marker>
+
+    <a-marker type="pattern" url="./marker/pattern-cat.patt" emitevents="true" id="marker_Cat">
+      <a-video src="#cat-video" width="10" height="10" position="0 0 0" rotation="-90 0 0"
+               scale="0.25 0.25 0.25" visible="true"></a-video>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+
+    <a-assets>
+      <video id="test-video" autoplay loop crossorigin="anonymous" playsinline preload="auto" muted>
+        <source src="./videos/yar.mp4" type="video/mp4">
+      </video>
+      <video id="A-video" autoplay loop crossorigin="anonymous" playsinline preload="auto" muted>
+        <source src="./videos/yar2.mp4" type="video/mp4">
+      </video>
+      <video id="B-video" autoplay loop crossorigin="anonymous" playsinline preload="auto" muted>
+        <source src="./videos/yar3.mp4" type="video/mp4">
+      </video>
+      <video id="C-video" autoplay loop crossorigin="anonymous" playsinline preload="auto" muted>
+        <source src="./videos/yar4.mp4" type="video/mp4">
+      </video>
+      <video id="cat-video" autoplay loop crossorigin="anonymous" playsinline preload="auto" muted>
+        <source src="./videos/cat.mp4" type="video/mp4">
+      </video>
+    </a-assets>
+  </a-scene>
+
+  <!-- Инструкции -->
+  <button id="instructionsButton">Показать инструкции</button>
+  <div id="instructions">
+    <h3>Инструкции по использованию Видеоплеера</h3>
+    <p>1. Направьте камеру вашего устройства на один из маркеров (hiro, A, B, C или Cat).</p>
+    <p>2. При обнаружении маркера начнется воспроизведение соответствующего видео.</p>
+    <p>3. Если маркер пропадает, видео останавливается и сбрасывается на начало.</p>
+    <p>4. Обеспечьте хорошее освещение и чёткую видимость маркера.</p>
+  </div>
+
+  <script>
+    // Мобильный запуск через кнопку
+    const startOverlay = document.getElementById('startOverlay');
+    const startButton = document.getElementById('startButton');
+
+    startButton.addEventListener('click', () => {
+      const videos = document.querySelectorAll('video');
+      videos.forEach(video => {
+        video.play().then(() => {
+          video.pause();
+          video.currentTime = 0;
+        }).catch(err => {
+          console.warn("Ошибка автозапуска видео:", err);
         });
+      });
+      startOverlay.style.display = 'none';
+    });
 
-        // Обнаружение маркера hiro
-        const marker_hiro = document.querySelector('#marker_hiro');
-        marker_hiro.addEventListener('markerFound', function () {
-            const video1 = document.querySelector('#video1');
-            const videoElement = video1.components.material.material.map.image;
-            videoElement.play();
-            videoElement.muted = false;
-        });
+    // Инструкции переключатель
+    const instructionsButton = document.getElementById('instructionsButton');
+    const instructions = document.getElementById('instructions');
+    instructionsButton.addEventListener('click', () => {
+      const isVisible = instructions.style.display === 'block';
+      instructions.style.display = isVisible ? 'none' : 'block';
+      instructionsButton.textContent = isVisible ? 'Показать инструкции' : 'Скрыть инструкции';
+    });
 
-        marker_hiro.addEventListener('markerLost', function () {
-            const video1 = document.querySelector('#video1');
-            const videoElement = video1.components.material.material.map.image;
-            videoElement.currentTime = 0;
-            videoElement.muted = true;
-        });
+    // Маркеры и соответствующие видео
+    const markers = [
+      { id: 'marker_hiro', videoId: 'test-video' },
+      { id: 'marker_A', videoId: 'A-video' },
+      { id: 'marker_B', videoId: 'B-video' },
+      { id: 'marker_C', videoId: 'C-video' },
+      { id: 'marker_Cat', videoId: 'cat-video' }
+    ];
 
-        // Обнаружение маркера A
-        const marker_A = document.querySelector('#marker_A');
-        marker_A.addEventListener('markerFound', function () {
-            const video2 = document.querySelector('#video2');
-            const videoElement = video2.components.material.material.map.image;
-            videoElement.play();
-            videoElement.muted = false;
-        });
+    markers.forEach(({ id, videoId }) => {
+      const marker = document.querySelector(`#${id}`);
+      const video = document.getElementById(videoId);
 
-        marker_A.addEventListener('markerLost', function () {
-            const video2 = document.querySelector('#video2');
-            const videoElement = video2.components.material.material.map.image;
-            videoElement.currentTime = 0;
-            videoElement.muted = true;
-        });
+      marker.addEventListener('markerFound', () => {
+        video.play();
+        video.muted = false;
+      });
 
-        // Обнаружение маркера B
-        const marker_B = document.querySelector('#marker_B');
-        marker_B.addEventListener('markerFound', function () {
-            const video3 = document.querySelector('#video3');
-            const videoElement = video3.components.material.material.map.image;
-            videoElement.play();
-            videoElement.muted = false;
-        });
+      marker.addEventListener('markerLost', () => {
+        video.pause();
+        video.currentTime = 0;
+        video.muted = true;
+      });
+    });
 
-        marker_B.addEventListener('markerLost', function () {
-            const video3 = document.querySelector('#video3');
-            const videoElement = video3.components.material.material.map.image;
-            videoElement.currentTime = 0;
-            videoElement.muted = true;
-        });
-
-        // Обнаружение маркера C
-        const marker_C = document.querySelector('#marker_C');
-        marker_C.addEventListener('markerFound', function () {
-            const video4 = document.querySelector('#video4');
-            const videoElement = video4.components.material.material.map.image;
-            videoElement.play();
-            videoElement.muted = false;
-        });
-
-        marker_C.addEventListener('markerLost', function () {
-            const video4 = document.querySelector('#video4');
-            const videoElement = video4.components.material.material.map.image;
-            videoElement.currentTime = 0;
-            videoElement.muted = true;
-        });
-        // Обнаружение маркера Cat
-        const marker_Cat = document.querySelector('#marker_Cat');
-        marker_Cat.addEventListener('markerFound', function () {
-            const video5 = document.querySelector('#video5');
-            const videoElement = video5.components.material.material.map.image;
-            videoElement.play();
-            videoElement.muted = false;
-        });
-
-        marker_Cat.addEventListener('markerLost', function () {
-            const video5 = document.querySelector('#video5');
-            const videoElement = video5.components.material.material.map.image;
-            videoElement.currentTime = 0;
-            videoElement.muted = true;
-        });
-    </script>
+    // При уходе со страницы — пауза всех видео
+    window.addEventListener('beforeunload', () => {
+      const videos = document.querySelectorAll('video');
+      videos.forEach(video => {
+        video.pause();
+        video.currentTime = 0;
+      });
+    });
+  </script>
 </body>
 </html>

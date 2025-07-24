@@ -7,9 +7,9 @@
   <!-- Подключение A-Frame и AR.js -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-   <style>
+  <style>
     .instructions {
-      font-family: Arial, sans-serif;
+      Flower: Arial, sans-serif;
       font-size: 16px;
       max-width: 300px;
       color: white;
@@ -41,12 +41,12 @@
       <a-video
         src="./yar.mp4"
         width="2"
-        height="1.125" <!-- Увеличенный размер, соотношение сторон 16:9 -->
-        position="0 0 0.1" <!-- Слегка приподнято над маркером для избежания наложения -->
+        height="1.125"
+        position="0 0 0.1"
         rotation="0 0 0"
         autoplay="true"
         loop="true"
-        material="shader: standard; side: double;" <!-- Двусторонний рендеринг -->
+        material="shader: standard; side: double;">
       </a-video>
     </a-marker>
 
@@ -62,12 +62,28 @@
 
   <!-- Скрипт для обработки ошибок -->
   <script>
-    document.querySelector('a-video').addEventListener('loaded', () => {
+    // Проверка HTTPS
+    if (window.location.protocol !== 'https:') {
+      alert('Для работы AR требуется HTTPS. Пожалуйста, откройте страницу через HTTPS.');
+    }
+
+    // Проверка загрузки видео
+    const video = document.querySelector('a-video');
+    video.addEventListener('loaded', () => {
       console.log('Видео успешно загружено');
     });
-    document.querySelector('a-video').addEventListener('error', (e) => {
+    video.addEventListener('error', (e) => {
       console.error('Ошибка загрузки видео:', e);
       alert('Не удалось загрузить видео. Проверьте путь к файлу или его формат.');
+    });
+
+    // Проверка загрузки маркера
+    const marker = document.querySelector('a-marker');
+    marker.addEventListener('markerFound', () => {
+      console.log('Маркер распознан');
+    });
+    marker.addEventListener('markerLost', () => {
+      console.log('Маркер потерян');
     });
   </script>
 </body>

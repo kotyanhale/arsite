@@ -68,7 +68,13 @@
             <a-video id="video4" src="#C-video" width="16" height="9" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
         </a-marker>
         <a-entity camera></a-entity>
+        
         <!-- ------------------------Маркер C------------------------ -->
+                <a-marker type="pattern" url="./marker/pattern-cat.patt" emitevents="true" id="marker_C">
+            <!-- Видеоэлемент -->
+            <a-video id="video4" src="#cat-video" width="16" height="9" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
+        </a-marker>
+        <a-entity camera></a-entity>
 
         <!-- Список видео -->
         <a-assets>
@@ -81,8 +87,8 @@
             <video id="B-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
                 <source src="./videos/yar3.mp4" type="video/mp4">
             </video>
-            <video id="C-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
-                <source src="./videos/yar.mp4" type="video/mp4">
+            <video id="cat-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
+                <source src="./videos/cat.mp4" type="video/mp4">
             </video>
         </a-assets>
         <!-- Список видео -->

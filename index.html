@@ -9,7 +9,7 @@
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
   <style>
     .instructions {
-      Flower: Arial, sans-serif;
+      font-family: Arial, sans-serif;
       font-size: 16px;
       max-width: 300px;
       color: white;
@@ -28,25 +28,31 @@
     }
   </style>
 </head>
-<body>
-  <!-- Сцена A-Frame с AR.js -->
+<body style="margin: 0; overflow: hidden;">
   <a-scene
+    embedded
     vr-mode-ui="enabled: false"
-    arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; patternRatio: 0.5; smooth: true; smoothCount: 5; smoothTolerance: 0.3; debugUIEnabled: false;"
+    arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; patternRatio: 0.65; smooth: true; smoothCount: 15; smoothTolerance: 0.1; smoothThreshold: 5; debugUIEnabled: true;"
     renderer="antialias: true; alpha: true;">
     
+    <!-- Ресурсы -->
+    <a-assets>
+      <video id="yar-video" autoplay loop crossorigin="anonymous" muted playsinline>
+        <source src="./yar.mp4" type="video/mp4">
+      </video>
+    </a-assets>
+
     <!-- Маркер, связанный с QR-кодом -->
-    <a-marker preset="custom" type="pattern" url="./marker.patt">
+    <a-marker preset="custom" type="pattern" url="./marker.patt" id="marker_qr">
       <!-- Видео, отображаемое в AR -->
       <a-video
-        src="./yar.mp4"
-        width="2"
-        height="1.125"
-        position="0 0 0.1"
+        src="#yar-video"
+        width="2.5"
+        height="1.40625"
+        position="0 0 0.2"
         rotation="0 0 0"
-        autoplay="true"
-        loop="true"
-        material="shader: standard; side: double;">
+        material="shader: standard; side: double;"
+        visible="true">
       </a-video>
     </a-marker>
 
@@ -57,10 +63,10 @@
   <!-- Инструкции для пользователя -->
   <div class="instructions">
     <p>Наведите камеру на QR-код, чтобы увидеть видео в AR!</p>
-    <p>Убедитесь, что освещение хорошее, и держите QR-код в кадре.</p>
+    <p>Держите камеру на расстоянии 20–50 см, используйте хорошее освещение.</p>
   </div>
 
-  <!-- Скрипт для обработки ошибок -->
+  <!-- Скрипт для обработки ошибок и трекинга -->
   <script>
     // Проверка HTTPS
     if (window.location.protocol !== 'https:') {
@@ -78,13 +84,31 @@
     });
 
     // Проверка загрузки маркера
-    const marker = document.querySelector('a-marker');
+    const marker = document.querySelector('#marker_qr');
     marker.addEventListener('markerFound', () => {
       console.log('Маркер распознан');
+      video.components.material.material.map.image.play();
     });
     marker.addEventListener('markerLost', () => {
       console.log('Маркер потерян');
+      video.components.material.material.map.image.pause();
+      video.components.material.material.map.image.currentTime = 0;
     });
+
+    // Дополнительная отладка загрузки маркера
+    fetch('./marker.patt')
+      .then(response => {
+        if (!response.ok) {
+          console.error('Ошибка загрузки marker.patt:', response.statusText);
+          alert('Файл marker.patt не найден или недоступен.');
+        } else {
+          console.log('Файл marker.patt успешно загружен');
+        }
+      })
+      .catch(error => {
+        console.error('Ошибка при загрузке marker.patt:', error);
+        alert('Ошибка загрузки marker.patt. Проверьте путь к файлу.');
+      });
   </script>
 </body>
 </html>

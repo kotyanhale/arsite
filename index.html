@@ -7,33 +7,39 @@
     <script src="./library/aframe.min.js"></script>
     <script src="./library/aframe-ar.js"></script>
     <style>
-        #loadingOverlay {
+        #instructionsButton {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
+            bottom: 10px;
+            left: 10px;
+            background: #333;
             color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            flex-direction: column;
+            border: 2px solid white;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
             font-family: Arial, sans-serif;
+            font-size: 16px;
+            z-index: 100;
+            transition: background 0.3s;
         }
-        #loadingText {
-            margin-top: 10px;
-            font-size: 18px;
+        #instructionsButton:hover {
+            background: #555;
+        }
+        #instructions {
+            display: none;
+            position: fixed;
+            bottom: 50px;
+            left: 10px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            z-index: 100;
+            max-width: 300px;
         }
     </style>
 </head>
 <body style="margin: 0; overflow: hidden;">
-    <!-- Наложение для отображения прогресса загрузки -->
-    <div id="loadingOverlay">
-        <div id="loadingText">Загрузка видео: 0%</div>
-    </div>
-
     <a-scene embedded arjs>
         <!-- ------------------------Маркер hiro--------------------- -->
         <a-marker type="pattern" url="./marker/pattern-hiro.patt" emitevents="true" id="marker_hiro">
@@ -70,7 +76,7 @@
                 <source src="./videos/yar.mp4" type="video/mp4">
             </video>
             <video id="A-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
-                <source src="./videos/yar.mp4" type="video/mp4">
+                <source src="https://vkvideo.ru/video54110218_456239100" type="video/mp4">
             </video>
             <video id="B-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
                 <source src="./videos/yar.mp4" type="video/mp4">
@@ -82,41 +88,26 @@
         <!-- Список видео -->
     </a-scene>
 
+    <!-- Кнопка для показа/скрытия инструкций -->
+    <button id="instructionsButton">Показать инструкции</button>
+
     <!-- Инструкции для пользователя -->
-    <div style="position: fixed; bottom: 10px; left: 10px; color: white; background: rgba(0, 0, 0, 0.7); padding: 10px; font-family: Arial, sans-serif; z-index: 100;">
-        <h3>Инструкции по использованию AR.js Видеоплеера</h3>
+    <div id="instructions">
+        <h3>Инструкции по использованию Видеоплеера</h3>
         <p>1. Направьте камеру вашего устройства на один из маркеров (hiro, A, B или C).</p>
         <p>2. При обнаружении маркера начнется воспроизведение соответствующего видео.</p>
         <p>3. Если маркер пропадает из поля зрения камеры, видео останавливается и сбрасывается на начало.</p>
-        <p>4. Дождитесь полной загрузки видео. Прогресс загрузки отображается на экране.</p>
-        <p>5. Убедитесь, что у вас хорошее освещение и маркер четко виден для корректной работы AR.</p>
+        <p>4. Убедитесь, что у вас хорошее освещение и маркер четко виден для корректной работы AR.</p>
     </div>
 
     <script>
-        // Показать прогресс загрузки видео
-        const videos = ['test-video', 'A-video', 'B-video', 'C-video'];
-        let loadedVideos = 0;
-        const totalVideos = videos.length;
-        const loadingText = document.getElementById('loadingText');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-
-        videos.forEach(videoId => {
-            const video = document.getElementById(videoId);
-            video.addEventListener('progress', () => {
-                if (video.buffered.length > 0 && video.buffered.end(0) > 0) {
-                    const percent = (video.buffered.end(0) / video.duration) * 100;
-                    const totalPercent = (loadedVideos / totalVideos) * 100;
-                    loadingText.textContent = `Загрузка видео: ${Math.round(totalPercent)}%`;
-                }
-            });
-            video.addEventListener('canplaythrough', () => {
-                loadedVideos++;
-                const totalPercent = (loadedVideos / totalVideos) * 100;
-                loadingText.textContent = `Загрузка видео: ${Math.round(totalPercent)}%`;
-                if (loadedVideos === totalVideos) {
-                    loadingOverlay.style.display = 'none';
-                }
-            });
+        // Переключение видимости инструкций
+        const instructionsButton = document.getElementById('instructionsButton');
+        const instructions = document.getElementById('instructions');
+        instructionsButton.addEventListener('click', () => {
+            const isVisible = instructions.style.display === 'block';
+            instructions.style.display = isVisible ? 'none' : 'block';
+            instructionsButton.textContent = isVisible ? 'Показать инструкции' : 'Скрыть инструкции';
         });
 
         // Обнаружение маркера hiro

@@ -8,19 +8,18 @@
     <script src="./library/aframe-ar.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Arial', sans-serif; margin: 0; }
+        body { font-family: 'Arial', sans-serif; }
         #instructions { transition: opacity 0.3s ease-in-out; }
         .hidden { opacity: 0; pointer-events: none; }
         .visible { opacity: 1; pointer-events: auto; }
-        .ar-scene { width: 100vw; height: 100vh; }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
     <!-- Заголовок с навигацией -->
     <header class="bg-blue-800 p-4 shadow-md">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">AR Видеоопыт</h1>
-            <div class="flex space-x-4">
+            <h1 class="text-2xl font-bold">AR визитка</h1>
+            <div class="space-x-4">
                 <button id="toggleInstructions" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-200">Показать инструкции</button>
                 <button id="resetVideos" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-200">Сбросить видео</button>
             </div>
@@ -46,7 +45,7 @@
     </div>
 
     <!-- AR сцена -->
-    <a-scene embedded arjs class="ar-scene">
+    <a-scene embedded arjs class="mt-4">
         <!-- Маркер Hiro -->
         <a-marker type="pattern" url="./marker/pattern-hiro.patt" emitevents="true" id="marker_hiro">
             <a-video id="video1" src="#test-video" width="16" height="9" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
@@ -104,12 +103,6 @@
                 videoElement.muted = true;
             });
         });
-
-        // Проверка доступа к камере
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .catch(function (err) {
-                alert('Не удалось получить доступ к камере. Пожалуйста, разрешите доступ к камере в настройках браузера.');
-            });
 
         // Обработчики событий для маркеров
         marker_hiro.addEventListener('markerFound', function () {

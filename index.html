@@ -3,160 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR Видеоплеер</title>
+    <title>AR.js Видеоплеер</title>
     <script src="./library/aframe.min.js"></script>
     <script src="./library/aframe-ar.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Arial', sans-serif; }
-        #instructions { transition: opacity 0.3s ease-in-out; }
-        .hidden { opacity: 0; pointer-events: none; }
-        .visible { opacity: 1; pointer-events: auto; }
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+        #loadingText {
+            margin-top: 10px;
+            font-size: 18px;
+        }
     </style>
 </head>
-<body class="bg-gray-900 text-white">
-    <!-- Заголовок с навигацией -->
-    <header class="bg-blue-800 p-4 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold">AR визитка</h1>
-            <div class="space-x-4">
-                <button id="toggleInstructions" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-200">Показать инструкции</button>
-                <button id="resetVideos" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-200">Сбросить видео</button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Секция с инструкциями -->
-    <div id="instructions" class="hidden container mx-auto mt-6 p-6 bg-gray-800 rounded-lg shadow-lg">
-        <h2 class="text-xl font-semibold mb-4">Как использовать AR видеоплеер</h2>
-        <ul class="list-disc pl-5 space-y-2">
-            <li>Наведите камеру вашего устройства на один из AR-маркеров (Hiro, A, B или C).</li>
-            <li>Когда маркер будет распознан, появится видео и начнёт воспроизводиться со звуком.</li>
-            <li>Уберите камеру от маркера, чтобы приостановить видео и выключить звук.</li>
-            <li>Используйте кнопку "Сбросить видео", чтобы остановить и перемотать все видео в начало.</li>
-            <li>Убедитесь, что ваш браузер имеет доступ к камере для работы AR-опыта.</li>
-            <li>Скачайте шаблоны маркеров по следующим ссылкам, если необходимо: 
-                <a href="./marker/pattern-hiro.patt" class="text-blue-400 hover:underline">Hiro</a>, 
-                <a href="./marker/pattern-letterA.patt" class="text-blue-400 hover:underline">A</a>, 
-                <a href="./marker/pattern-letterB.patt" class="text-blue-400 hover:underline">B</a>, 
-                <a href="./marker/pattern-letterC.patt" class="text-blue-400 hover:underline">C</a>.
-            </li>
-        </ul>
+<body style="margin: 0; overflow: hidden;">
+    <!-- Наложение для отображения прогресса загрузки -->
+    <div id="loadingOverlay">
+        <div id="loadingText">Загрузка видео: 0%</div>
     </div>
 
-    <!-- AR сцена -->
-    <a-scene embedded arjs class="mt-4">
-        <!-- Маркер Hiro -->
+    <a-scene embedded arjs>
+        <!-- ------------------------Маркер hiro--------------------- -->
         <a-marker type="pattern" url="./marker/pattern-hiro.patt" emitevents="true" id="marker_hiro">
+            <!-- Видеоэлемент -->
             <a-video id="video1" src="#test-video" width="16" height="9" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
         </a-marker>
         <a-entity camera></a-entity>
-        <!-- Маркер A -->
+        <!-- ------------------------Маркер hiro--------------------- -->
+        <!-- ------------------------Маркер A------------------------ -->
         <a-marker type="pattern" url="./marker/pattern-letterA.patt" emitevents="true" id="marker_A">
+            <!-- Видеоэлемент -->
             <a-video id="video2" src="#A-video" width="16" height="9" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
         </a-marker>
         <a-entity camera></a-entity>
-        <!-- Маркер B -->
+        <!-- ------------------------Маркер A------------------------ -->
+        <!-- ------------------------Маркер B------------------------ -->
         <a-marker type="pattern" url="./marker/pattern-letterB.patt" emitevents="true" id="marker_B">
+            <!-- Видеоэлемент -->
             <a-video id="video3" src="#B-video" width="16" height="9" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
         </a-marker>
         <a-entity camera></a-entity>
-        <!-- Маркер C -->
+        <!-- ------------------------Маркер B------------------------ -->
+        <!-- ------------------------Маркер C------------------------ -->
         <a-marker type="pattern" url="./marker/pattern-letterC.patt" emitevents="true" id="marker_C">
+            <!-- Видеоэлемент -->
             <a-video id="video4" src="#C-video" width="16" height="9" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
         </a-marker>
         <a-entity camera></a-entity>
+        <!-- ------------------------Маркер C------------------------ -->
 
         <!-- Список видео -->
         <a-assets>
-            <video id="test-video" autoplay loop crossorigin="anonymous" playsinline>
+            <video id="test-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
                 <source src="./videos/yar.mp4" type="video/mp4">
             </video>
-            <video id="A-video" autoplay loop crossorigin="anonymous" playsinline>
+            <video id="A-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
                 <source src="./videos/yar.mp4" type="video/mp4">
             </video>
-            <video id="B-video" autoplay loop crossorigin="anonymous" playsinline>
+            <video id="B-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
                 <source src="./videos/yar.mp4" type="video/mp4">
             </video>
-            <video id="C-video" autoplay loop crossorigin="anonymous" playsinline>
+            <video id="C-video" autoplay loop crossorigin="anonymous" playsinline preload="auto">
                 <source src="./videos/yar.mp4" type="video/mp4">
             </video>
         </a-assets>
+        <!-- Список видео -->
     </a-scene>
 
-    <script>
-        // Показать/скрыть инструкции
-        document.getElementById('toggleInstructions').addEventListener('click', function () {
-            var instructions = document.getElementById('instructions');
-            instructions.classList.toggle('hidden');
-            instructions.classList.toggle('visible');
-            this.textContent = instructions.classList.contains('hidden') ? 'Показать инструкции' : 'Скрыть инструкции';
-        });
+    <!-- Инструкции для пользователя -->
+    <div style="position: fixed; bottom: 10px; left: 10px; color: white; background: rgba(0, 0, 0, 0.7); padding: 10px; font-family: Arial, sans-serif; z-index: 100;">
+        <h3>Инструкции по использованию AR.js Видеоплеера</h3>
+        <p>1. Направьте камеру вашего устройства на один из маркеров (hiro, A, B или C).</p>
+        <p>2. При обнаружении маркера начнется воспроизведение соответствующего видео.</p>
+        <p>3. Если маркер пропадает из поля зрения камеры, видео останавливается и сбрасывается на начало.</p>
+        <p>4. Дождитесь полной загрузки видео. Прогресс загрузки отображается на экране.</p>
+        <p>5. Убедитесь, что у вас хорошее освещение и маркер четко виден для корректной работы AR.</p>
+    </div>
 
-        // Сброс всех видео
-        document.getElementById('resetVideos').addEventListener('click', function () {
-            ['video1', 'video2', 'video3', 'video4'].forEach(function (id) {
-                var video = document.querySelector('#' + id);
-                var videoElement = video.components.material.material.map.image;
-                videoElement.pause();
-                videoElement.currentTime = 0;
-                videoElement.muted = true;
+    <script>
+        // Показать прогресс загрузки видео
+        const videos = ['test-video', 'A-video', 'B-video', 'C-video'];
+        let loadedVideos = 0;
+        const totalVideos = videos.length;
+        const loadingText = document.getElementById('loadingText');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        videos.forEach(videoId => {
+            const video = document.getElementById(videoId);
+            video.addEventListener('progress', () => {
+                if (video.buffered.length > 0 && video.buffered.end(0) > 0) {
+                    const percent = (video.buffered.end(0) / video.duration) * 100;
+                    const totalPercent = (loadedVideos / totalVideos) * 100;
+                    loadingText.textContent = `Загрузка видео: ${Math.round(totalPercent)}%`;
+                }
+            });
+            video.addEventListener('canplaythrough', () => {
+                loadedVideos++;
+                const totalPercent = (loadedVideos / totalVideos) * 100;
+                loadingText.textContent = `Загрузка видео: ${Math.round(totalPercent)}%`;
+                if (loadedVideos === totalVideos) {
+                    loadingOverlay.style.display = 'none';
+                }
             });
         });
 
-        // Обработчики событий для маркеров
+        // Обнаружение маркера hiro
+        const marker_hiro = document.querySelector('#marker_hiro');
         marker_hiro.addEventListener('markerFound', function () {
-            var video1 = document.querySelector('#video1');
-            var videoElement = video1.components.material.material.map.image;
+            const video1 = document.querySelector('#video1');
+            const videoElement = video1.components.material.material.map.image;
             videoElement.play();
             videoElement.muted = false;
         });
 
         marker_hiro.addEventListener('markerLost', function () {
-            var video1 = document.querySelector('#video1');
-            var videoElement = video1.components.material.material.map.image;
+            const video1 = document.querySelector('#video1');
+            const videoElement = video1.components.material.material.map.image;
             videoElement.currentTime = 0;
             videoElement.muted = true;
         });
 
+        // Обнаружение маркера A
+        const marker_A = document.querySelector('#marker_A');
         marker_A.addEventListener('markerFound', function () {
-            var video2 = document.querySelector('#video2');
-            var videoElement = video2.components.material.material.map.image;
+            const video2 = document.querySelector('#video2');
+            const videoElement = video2.components.material.material.map.image;
             videoElement.play();
             videoElement.muted = false;
         });
 
         marker_A.addEventListener('markerLost', function () {
-            var video2 = document.querySelector('#video2');
-            var videoElement = video2.components.material.material.map.image;
+            const video2 = document.querySelector('#video2');
+            const videoElement = video2.components.material.material.map.image;
             videoElement.currentTime = 0;
             videoElement.muted = true;
         });
 
+        // Обнаружение маркера B
+        const marker_B = document.querySelector('#marker_B');
         marker_B.addEventListener('markerFound', function () {
-            var video3 = document.querySelector('#video3');
-            var videoElement = video3.components.material.material.map.image;
+            const video3 = document.querySelector('#video3');
+            const videoElement = video3.components.material.material.map.image;
             videoElement.play();
             videoElement.muted = false;
         });
 
         marker_B.addEventListener('markerLost', function () {
-            var video3 = document.querySelector('#video3');
-            var videoElement = video3.components.material.material.map.image;
+            const video3 = document.querySelector('#video3');
+            const videoElement = video3.components.material.material.map.image;
             videoElement.currentTime = 0;
             videoElement.muted = true;
         });
 
+        // Обнаружение маркера C
+        const marker_C = document.querySelector('#marker_C');
         marker_C.addEventListener('markerFound', function () {
-            var video4 = document.querySelector('#video4');
-            var videoElement = video4.components.material.material.map.image;
+            const video4 = document.querySelector('#video4');
+            const videoElement = video4.components.material.material.map.image;
             videoElement.play();
             videoElement.muted = false;
         });
 
         marker_C.addEventListener('markerLost', function () {
-            var video4 = document.querySelector('#video4');
-            var videoElement = video4.components.material.material.map.image;
+            const video4 = document.querySelector('#video4');
+            const videoElement = video4.components.material.material.map.image;
             videoElement.currentTime = 0;
             videoElement.muted = true;
         });

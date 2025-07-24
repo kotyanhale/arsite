@@ -70,9 +70,11 @@
         <a-entity camera></a-entity>
         
         <!-- ------------------------Маркер C------------------------ -->
-                <a-marker type="pattern" url="./marker/pattern-cat.patt" emitevents="true" id="marker_C">
+        
+        <!-- ------------------------Маркер Cat------------------------ -->
+                <a-marker type="pattern" url="./marker/pattern-cat.patt" emitevents="true" id="marker_Cat">
             <!-- Видеоэлемент -->
-            <a-video id="video4" src="#cat-video" width="16" height="9" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
+            <a-video id="video5" src="#cat-video" width="10" height="10" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
         </a-marker>
         <a-entity camera></a-entity>
 
@@ -176,6 +178,21 @@
         marker_C.addEventListener('markerLost', function () {
             const video4 = document.querySelector('#video4');
             const videoElement = video4.components.material.material.map.image;
+            videoElement.currentTime = 0;
+            videoElement.muted = true;
+        });
+        // Обнаружение маркера Cat
+        const marker_Cat = document.querySelector('#marker_Cat');
+        marker_Cat.addEventListener('markerFound', function () {
+            const video5 = document.querySelector('#video5');
+            const videoElement = video5.components.material.material.map.image;
+            videoElement.play();
+            videoElement.muted = false;
+        });
+
+        marker_Cat.addEventListener('markerLost', function () {
+            const video5 = document.querySelector('#video5');
+            const videoElement = video5.components.material.material.map.image;
             videoElement.currentTime = 0;
             videoElement.muted = true;
         });

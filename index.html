@@ -32,7 +32,7 @@
   <a-scene
     embedded
     vr-mode-ui="enabled: false"
-    arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; patternRatio: 0.65; smooth: true; smoothCount: 15; smoothTolerance: 0.1; smoothThreshold: 5; debugUIEnabled: true;"
+    arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; patternRatio: 0.65; smooth: true; smoothCount: 20; smoothTolerance: 0.05; smoothThreshold: 5; debugUIEnabled: true;"
     renderer="antialias: true; alpha: true;">
     
     <!-- Ресурсы -->
@@ -43,13 +43,13 @@
     </a-assets>
 
     <!-- Маркер, связанный с QR-кодом -->
-    <a-marker preset="custom" type="pattern" url="./marker.patt" id="marker_qr">
+    <a-marker preset="custom" type="pattern" url="./marker.patt" id="marker_qr" emitevents="true">
       <!-- Видео, отображаемое в AR -->
       <a-video
         src="#yar-video"
         width="2.5"
-        height="1.40625"
-        position="0 0 0.2"
+        height="1.40625" <!-- Соотношение сторон 16:9 -->
+        position="0 0 0.2" <!-- Приподнято для стабильности -->
         rotation="0 0 0"
         material="shader: standard; side: double;"
         visible="true">
@@ -63,7 +63,7 @@
   <!-- Инструкции для пользователя -->
   <div class="instructions">
     <p>Наведите камеру на QR-код, чтобы увидеть видео в AR!</p>
-    <p>Держите камеру на расстоянии 20–50 см, используйте хорошее освещение.</p>
+    <p>Держите камеру на расстоянии 20–50 см, используйте яркое освещение.</p>
   </div>
 
   <!-- Скрипт для обработки ошибок и трекинга -->
@@ -72,6 +72,11 @@
     if (window.location.protocol !== 'https:') {
       alert('Для работы AR требуется HTTPS. Пожалуйста, откройте страницу через HTTPS.');
     }
+
+    // Оптимизация Canvas для AR.js
+    const canvas = document.createElement('canvas');
+    canvas.setAttribute('willReadFrequently', 'true');
+    document.body.appendChild(canvas);
 
     // Проверка загрузки видео
     const video = document.querySelector('a-video');
@@ -95,7 +100,7 @@
       video.components.material.material.map.image.currentTime = 0;
     });
 
-    // Дополнительная отладка загрузки маркера
+    // Проверка загрузки marker.patt
     fetch('./marker.patt')
       .then(response => {
         if (!response.ok) {

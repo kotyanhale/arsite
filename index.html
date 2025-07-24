@@ -1,189 +1,125 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR визитка</title>
-    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
-        .instructions {
-            font-family: Arial, sans-serif;
-            font-size: 16px;
-            max-width: 300px;
-            color: white;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 5px;
-            position: fixed;
-            top: 10px;
-            left: 10px;
-        }
-        @media (max-width: 600px) {
-            .instructions {
-                font-size: 14px;
-                padding: 8px;
-            }
-        }
-    </style>
+    <title>AR.js Video Player</title>
+    <script src="./library/aframe.min.js"></script>
+    <script src="./library/aframe-ar.js"></script>
 </head>
-<body>
-    <a-scene
-        embedded
-        vr-mode-ui="enabled: false"
-        arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3; patternRatio: 0.65; smooth: true; smoothCount: 20; smoothTolerance: 0.05; smoothThreshold: 5; debugUIEnabled: true;"
-        renderer="antialias: true; alpha: true;">
-        
-        <!-- Ресурсы -->
+<body style="margin: 0; overflow: hidden;">
+    <a-scene embedded arjs>
+	<!-- ------------------------Marker hiro--------------------- -->
+        <a-marker type="pattern" url="./marker/pattern-hiro.patt" emitevents="true" id="marker_hiro">
+            <!-- Video element -->
+            <a-video id="video1" src="#test-video" width="9" height="16" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
+        </a-marker>
+        <a-entity camera></a-entity>
+	<!-- ------------------------Marker hiro--------------------- -->
+	<!-- ------------------------Marker A------------------------ -->
+        <a-marker type="pattern" url="./marker/pattern-letterA.patt" emitevents="true" id="marker_A">
+            <!-- Video element -->
+            <a-video id="video2" src="#A-video" width="9" height="16" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
+        </a-marker>
+        <a-entity camera></a-entity>
+	<!-- ------------------------Marker A------------------------ -->
+	<!-- ------------------------Marker B------------------------ -->
+        <a-marker type="pattern" url="./marker/pattern-letterB.patt" emitevents="true" id="marker_B">
+            <!-- Video element -->
+            <a-video id="video3" src="#B-video" width="9" height="16" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
+        </a-marker>
+        <a-entity camera></a-entity>
+	<!-- ------------------------Marker B------------------------ -->
+	<!-- ------------------------Marker C------------------------ -->
+        <a-marker type="pattern" url="./marker/pattern-letterC.patt" emitevents="true" id="marker_C">
+            <!-- Video element -->
+            <a-video id="video4" src="#C-video" width="9" height="16" position="0 0 0" rotation="-90 0 0" scale="0.25 0.25 0.25" visible="true"></a-video>
+        </a-marker>
+        <a-entity camera></a-entity>
+	<!-- ------------------------Marker C------------------------ -->
+	
+	<!-- List of Video -->
         <a-assets>
-            <video id="yar-video" autoplay loop crossorigin="anonymous" playsinline>
+            <video id="test-video" autoplay loop crossorigin="anonymous" playsinline>
                 <source src="./videos/yar.mp4" type="video/mp4">
             </video>
+			
+			<video id="A-video" autoplay loop crossorigin="anonymous" playsinline>
+                <source src="./videos/yar.mp4" type="video/mp4">
+            </video>
+			
+            <video id="B-video" autoplay loop crossorigin="anonymous" playsinline>
+                <source src="./videos/yar.mp4" type="video/mp4">
+            </video>
+			
+            <video id="C-video" autoplay loop crossorigin="anonymous" playsinline>
+                <source src="./videos/yar.mp4" type="video/mp4">
+            </video>			
         </a-assets>
-
-        <!-- Marker hiro -->
-        <a-marker type="pattern" url="./marker/pattern-hiro.patt" emitevents="true" id="marker_hiro">
-            <a-video
-                id="video1"
-                src="#yar-video"
-                width="2.5"
-                height="1.40625"
-                position="0 0 0.2"
-                rotation="-90 0 0"
-                scale="1 1 1"
-                material="shader: standard; side: double;"
-                visible="true">
-            </a-video>
-        </a-marker>
-
-        <!-- Marker A -->
-        <a-marker type="pattern" url="./marker/pattern-letterA.patt" emitevents="true" id="marker_A">
-            <a-video
-                id="video2"
-                src="#yar-video"
-                width="2.5"
-                height="1.40625" 
-                position="0 0 0.2"
-                rotation="-90 0 0"
-                scale="1 1 1"
-                material="shader: standard; side: double;"
-                visible="true">
-            </a-video>
-        </a-marker>
-
-        <!-- Marker B -->
-        <a-marker type="pattern" url="./marker/pattern-letterB.patt" emitevents="true" id="marker_B">
-            <a-video
-                id="video3"
-                src="#yar-video"
-                width="2.5"
-                height="1.40625" 
-                position="0 0 0.2"
-                rotation="-90 0 0"
-                scale="1 1 1"
-                material="shader: standard; side: double;"
-                visible="true">
-            </a-video>
-        </a-marker>
-
-        <!-- Marker C -->
-        <a-marker type="pattern" url="./marker/pattern-letterC.patt" emitevents="true" id="marker_C">
-            <a-video
-                id="video4"
-                src="#yar-video"
-                width="2.5"
-                height="1.40625"
-                position="0 0 0.2"
-                rotation="-90 0 0"
-                scale="1 1 1"
-                material="shader: standard; side: double;"
-                visible="true">
-            </a-video>
-        </a-marker>
-
-        <!-- Камера (одна для всей сцены) -->
-        <a-entity camera></a-entity>
-    </a-scene>
-
-    <!-- Инструкции для пользователя -->
-    <div class="instructions">
-        <p>Наведите камеру на маркер, чтобы увидеть видео в AR!</p>
-        <p>Держите камеру на расстоянии 20–50 см, используйте яркое освещение.</p>
-    </div>
-
-    <!-- Скрипт для управления видео и отладки -->
-    <script>
-        // Проверка HTTPS
-        if (window.location.protocol !== 'https:') {
-            alert('Для работы AR требуется HTTPS. Пожалуйста, откройте страницу через HTTPS.');
-        }
-
-        // Оптимизация Canvas
-        const canvas = document.createElement('canvas');
-        canvas.setAttribute('willReadFrequently', 'true');
-        document.body.appendChild(canvas);
-
-        // Функция для управления видео
-        function setupVideo(markerId, videoId) {
-            const marker = document.querySelector(`#${markerId}`);
-            const video = document.querySelector(`#${videoId}`);
-            
-            marker.addEventListener('markerFound', () => {
-                console.log(`${markerId} распознан`);
-                const videoElement = video.components.material.material.map.image;
-                videoElement.muted = false; // Включаем звук
+	<!-- List of Video -->
+	
+        <script>
+			<!-- Marker detection hiro -->
+            marker_hiro.addEventListener('markerFound', function () {
+                var video1 = document.querySelector('#video1');
+                var videoElement = video1.components.material.material.map.image;
                 videoElement.play();
+                videoElement.muted = false;
             });
 
-            marker.addEventListener('markerLost', () => {
-                console.log(`${markerId} потерян`);
-                const videoElement = video.components.material.material.map.image;
-                videoElement.pause();
+            marker_hiro.addEventListener('markerLost', function () {
+                var video1 = document.querySelector('#video1');
+                var videoElement = video1.components.material.material.map.image;
                 videoElement.currentTime = 0;
-                videoElement.muted = true; // Отключаем звук при потере маркера
+                videoElement.muted = true;
+            });
+			<!-- Marker detection hiro -->
+			<!-- Marker detection A -->
+            marker_A.addEventListener('markerFound', function () {
+                var video2 = document.querySelector('#video2');
+                var videoElement = video2.components.material.material.map.image;
+                videoElement.play();
+                videoElement.muted = false;
             });
 
-            video.addEventListener('loaded', () => {
-                console.log(`Видео ${videoId} загружено`);
+            marker_A.addEventListener('markerLost', function () {
+                var video2 = document.querySelector('#video2');
+                var videoElement = video2.components.material.material.map.image;
+                videoElement.currentTime = 0;
+                videoElement.muted = true;
             });
-            video.addEventListener('error', (e) => {
-                console.error(`Ошибка загрузки видео ${videoId}:`, e);
-                alert(`Не удалось загрузить видео ${videoId}. Проверьте путь или формат.`);
+			<!-- Marker detection A -->
+			<!-- Marker detection B -->
+            marker_B.addEventListener('markerFound', function () {
+                var video3 = document.querySelector('#video3');
+                var videoElement = video3.components.material.material.map.image;
+                videoElement.play();
+                videoElement.muted = false;
             });
-        }
 
-        // Настройка для каждого маркера
-        setupVideo('marker_hiro', 'video1');
-        setupVideo('marker_A', 'video2');
-        setupVideo('marker_B', 'video3');
-        setupVideo('marker_C', 'video4');
+            marker_B.addEventListener('markerLost', function () {
+                var video3 = document.querySelector('#video3');
+                var videoElement = video3.components.material.material.map.image;
+                videoElement.currentTime = 0;
+                videoElement.muted = true;
+            });
+			<!-- Marker detection B -->	
+			<!-- Marker detection C -->
+            marker_C.addEventListener('markerFound', function () {
+                var video4 = document.querySelector('#video4');
+                var videoElement = video4.components.material.material.map.image;
+                videoElement.play();
+                videoElement.muted = false;
+            });
 
-        // Проверка загрузки маркеров
-        const markers = [
-            './marker/pattern-hiro.patt',
-            './marker/pattern-letterA.patt',
-            './marker/pattern-letterB.patt',
-            './marker/pattern-letterC.patt'
-        ];
-        markers.forEach(markerUrl => {
-            fetch(markerUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        console.error(`Ошибка загрузки ${markerUrl}:`, response.statusText);
-                        alert(`Файл ${markerUrl} не найден или недоступен.`);
-                    } else {
-                        console.log(`Файл ${markerUrl} успешно загружен`);
-                    }
-                })
-                .catch(error => {
-                    console.error(`Ошибка при загрузке ${markerUrl}:`, error);
-                    alert(`Ошибка загрузки ${markerUrl}. Проверьте путь к файлу.`);
-                });
-        });
-    </script>
+            marker_C.addEventListener('markerLost', function () {
+                var video4 = document.querySelector('#video4');
+                var videoElement = video4.components.material.material.map.image;
+                videoElement.currentTime = 0;
+                videoElement.muted = true;
+            });
+			<!-- Marker detection C -->				
+        </script>
+    </a-scene>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR Визитка</title>
+    <title>AR Видеоплеер</title>
     <script src="./library/aframe.min.js"></script>
     <script src="./library/aframe-ar.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,28 +12,25 @@
         #instructions { transition: opacity 0.3s ease-in-out; }
         .hidden { opacity: 0; pointer-events: none; }
         .visible { opacity: 1; pointer-events: auto; }
-        .ar-scene { width: 100vw; height: calc(100vh - 80px); }
-        @media (max-width: 640px) {
-            .ar-scene { height: calc(100vh - 120px); }
-        }
+        .ar-scene { width: 100vw; height: 100vh; }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
     <!-- Заголовок с навигацией -->
     <header class="bg-blue-800 p-4 shadow-md">
-        <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
-            <h1 class="text-xl sm:text-2xl font-bold mb-2 sm:mb-0">AR Визитка</h1>
-            <div class="flex space-x-2 sm:space-x-4">
-                <button id="toggleInstructions" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-3 sm:px-4 rounded transition duration-200 text-sm sm:text-base">Показать инструкции</button>
-                <button id="resetVideos" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-3 sm:px-4 rounded transition duration-200 text-sm sm:text-base">Сбросить видео</button>
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">AR Видеоопыт</h1>
+            <div class="flex space-x-4">
+                <button id="toggleInstructions" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-200">Показать инструкции</button>
+                <button id="resetVideos" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-200">Сбросить видео</button>
             </div>
         </div>
     </header>
 
     <!-- Секция с инструкциями -->
-    <div id="instructions" class="hidden container mx-auto mt-4 sm:mt-6 p-4 sm:p-6 bg-gray-800 rounded-lg shadow-lg">
-        <h2 class="text-lg sm:text-xl font-semibold mb-4">Как использовать AR видеоплеер</h2>
-        <ul class="list-disc pl-5 space-y-2 text-sm sm:text-base">
+    <div id="instructions" class="hidden container mx-auto mt-6 p-6 bg-gray-800 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold mb-4">Как использовать AR видеоплеер</h2>
+        <ul class="list-disc pl-5 space-y-2">
             <li>Наведите камеру вашего устройства на один из AR-маркеров (Hiro, A, B или C).</li>
             <li>Когда маркер будет распознан, появится видео и начнёт воспроизводиться со звуком.</li>
             <li>Уберите камеру от маркера, чтобы приостановить видео и выключить звук.</li>

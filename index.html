@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AR.js Видеоплеер</title>
+  <title>AR Видеоплеер</title>
   <script src="./library/aframe.min.js"></script>
   <script src="./library/aframe-ar.js"></script>
   <style>
@@ -37,7 +37,6 @@
       z-index: 100;
       max-width: 300px;
     }
-
     #startOverlay {
       position: fixed;
       top: 0; left: 0;
@@ -53,7 +52,6 @@
       text-align: center;
       padding: 20px;
     }
-
     #startButton {
       padding: 15px 30px;
       font-size: 18px;
@@ -74,6 +72,7 @@
 
   <!-- AR-сцена -->
   <a-scene embedded arjs>
+    <!-- Видеомаркеры -->
     <a-marker type="pattern" url="./marker/pattern-hiro.patt" emitevents="true" id="marker_hiro">
       <a-video src="#test-video" width="16" height="9" position="0 0 0" rotation="-90 0 0"
                scale="0.25 0.25 0.25" visible="true"></a-video>
@@ -99,9 +98,22 @@
                scale="0.25 0.25 0.25" visible="true"></a-video>
     </a-marker>
 
+    <!-- Новый маркер с вращающейся моделью -->
+    <a-marker type="pattern" url="./marker/pattern-letterG.patt" emitevents="true" id="marker_G">
+      <a-entity id="plant-model"
+                obj-model="obj: #plant-obj; mtl: #plant-mtl"
+                position="0 0 0"
+                scale="0.05 0.05 0.05"
+                rotation="0 0 0"
+                class="clickable"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 5000; easing: linear">
+      </a-entity>
+    </a-marker>
+
     <a-entity camera></a-entity>
 
     <a-assets>
+      <!-- Видео -->
       <video id="test-video" autoplay loop crossorigin="anonymous" playsinline preload="auto" muted>
         <source src="./videos/yar.mp4" type="video/mp4">
       </video>
@@ -117,21 +129,24 @@
       <video id="cat-video" autoplay loop crossorigin="anonymous" playsinline preload="auto" muted>
         <source src="./videos/cat.mp4" type="video/mp4">
       </video>
+
+      <!-- Модель -->
+      <a-asset-item id="plant-obj" src="./models/plant.obj"></a-asset-item>
+      <a-asset-item id="plant-mtl" src="./models/plant.mtl"></a-asset-item>
     </a-assets>
   </a-scene>
 
   <!-- Инструкции -->
   <button id="instructionsButton">Показать инструкции</button>
   <div id="instructions">
-    <h3>Инструкции по использованию Видеоплеера</h3>
-    <p>1. Направьте камеру вашего устройства на один из маркеров (hiro, A, B, C или Cat).</p>
-    <p>2. При обнаружении маркера начнется воспроизведение соответствующего видео.</p>
-    <p>3. Если маркер пропадает, видео останавливается и сбрасывается на начало.</p>
-    <p>4. Обеспечьте хорошее освещение и чёткую видимость маркера.</p>
+    <h3>Инструкции по использованию AR-плеера</h3>
+    <p>1. Наведите камеру на один из маркеров (hiro, A, B, C, Cat или G).</p>
+    <p>2. Видео начнёт играть на маркерах с роликами. Модель G вращается и кликабельна.</p>
+    <p>3. Убедитесь в хорошем освещении и резкости маркера.</p>
   </div>
 
   <script>
-    // Мобильный запуск через кнопку
+    // Кнопка запуска на мобильных
     const startOverlay = document.getElementById('startOverlay');
     const startButton = document.getElementById('startButton');
 
@@ -148,7 +163,7 @@
       startOverlay.style.display = 'none';
     });
 
-    // Инструкции переключатель
+    // Инструкции: показать/скрыть
     const instructionsButton = document.getElementById('instructionsButton');
     const instructions = document.getElementById('instructions');
     instructionsButton.addEventListener('click', () => {
@@ -157,7 +172,7 @@
       instructionsButton.textContent = isVisible ? 'Показать инструкции' : 'Скрыть инструкции';
     });
 
-    // Маркеры и соответствующие видео
+    // Видео по маркерам
     const markers = [
       { id: 'marker_hiro', videoId: 'test-video' },
       { id: 'marker_A', videoId: 'A-video' },
@@ -182,7 +197,18 @@
       });
     });
 
-    // При уходе со страницы — пауза всех видео
+    // Клик по модели
+    const plant = document.getElementById('plant-model');
+
+    plant.addEventListener('click', () => {
+      alert("Ты кликнул на растение 🌱");
+    });
+
+    plant.addEventListener('touchstart', () => {
+      alert("Ты коснулся растения 🌿");
+    });
+
+    // Пауза видео при уходе со страницы
     window.addEventListener('beforeunload', () => {
       const videos = document.querySelectorAll('video');
       videos.forEach(video => {
